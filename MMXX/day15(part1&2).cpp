@@ -23,7 +23,7 @@ int solve(deque<int> dq, int n) {
 
 int main() {
 	const deque<int> dq = {
-        #include "text.in"
+        	#include "text.in"
 	};
 	cout << solve(dq, 2020) << endl;//1
 	cout << solve(dq, 3e7) << endl;//2
