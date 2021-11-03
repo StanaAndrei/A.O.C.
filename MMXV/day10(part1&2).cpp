@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 constexpr char start[] = "1321131112";
-constexpr int n = 40;
+constexpr bool part1 = false;/*change this to change part*/
+constexpr int n = part1 ? 40 : 50;
 
 string lookAndSay(string s) {
     string ans = "";
