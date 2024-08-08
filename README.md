@@ -1,2 +1,2 @@
 # A.O.C.
-repo for Advent of code puzzles' sources (https://adventofcode.com)
+repo for [Advent of Code](https://adventofcode.com) puzzles' sources 
