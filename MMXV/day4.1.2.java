@@ -1,22 +1,19 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class Main {
-    final static short PUZZLE_PART = 2;
+    final static short PUZZLE_PART = 1;
     final static String TARGET = (PUZZLE_PART == 1) ? "00000" : "000000";
 
-    private static int findAdventCoin(final String secretKey) throws NoSuchAlgorithmException {
-        int nr = 1;
+    private static Optional<Integer> findAdventCoin(final String secretKey) throws NoSuchAlgorithmException {
         var md = MessageDigest.getInstance("MD5");
-        while (true) {
-            final String input = secretKey + nr;
-            byte[] digest = md.digest(input.getBytes());
-            final String hash = toHexStr(digest);
-            if (hash.startsWith(TARGET)) {
-                return nr;
-            }
-            nr++;
-        }
+        return IntStream.iterate(1, nr -> nr + 1)
+                .mapToObj(nr -> new Object[] { nr, md.digest((secretKey + nr).getBytes()) })
+                .filter(data -> toHexStr((byte[]) data[1]).startsWith(TARGET))
+                .map(data -> (Integer) data[0])
+                .findFirst();
     }
 
     private static String byteToHex(byte b) {
@@ -27,16 +24,14 @@ public class Main {
     }
 
     private static String toHexStr(byte[] bytes) {
-        var sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            sb.append(byteToHex(bytes[i]));
-        }
-        return sb.toString();
+        return IntStream.range(0, bytes.length)
+                .mapToObj(i -> byteToHex(bytes[i]))
+                .reduce(new StringBuilder(), StringBuilder::append, StringBuilder::append)
+                .toString();
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         final String secretKey = "iwrupvqb";
-        final int ans = findAdventCoin(secretKey);
-        System.out.println(ans);
+        findAdventCoin(secretKey).ifPresent(System.out::println);
     }
 }
